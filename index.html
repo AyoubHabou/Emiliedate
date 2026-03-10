@@ -1,318 +1,889 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas Quiz Challenge</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office Supply Request — Schooner Transport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #f5f4f0;
+    --white:      #ffffff;
+    --slate:      #1e3a4f;
+    --slate-mid:  #2d5a7a;
+    --teal:       #0891b2;
+    --teal-light: #e0f2fe;
+    --teal-pale:  #f0f9ff;
+    --amber:      #d97706;
+    --amber-bg:   #fffbeb;
+    --green:      #059669;
+    --green-bg:   #ecfdf5;
+    --red:        #dc2626;
+    --red-bg:     #fef2f2;
+    --border:     #e2ddd6;
+    --border-mid: #ccc7be;
+    --text:       #1a1a1a;
+    --text-mid:   #4a4a4a;
+    --text-light: #888880;
+    --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md:  0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg:  0 8px 32px rgba(0,0,0,0.1);
+  }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #165B33 0%, #BB2528 50%, #165B33 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+  * { margin:0; padding:0; box-sizing:border-box; }
 
-        .container {
-            background: white;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-        }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    font-size: 15px;
+  }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+  /* grain overlay */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
 
-        .header h1 {
-            font-size: 2.5em;
-            color: #BB2528;
-            margin-bottom: 10px;
-        }
+  /* ── LAYOUT ── */
+  .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 24px 60px; }
 
-        .gift-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
+  /* ── HEADER ── */
+  .header {
+    background: var(--slate);
+    margin: 0 -24px;
+    padding: 0 24px;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: 0; right: -60px;
+    width: 300px; height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(8,145,178,0.15) 100%);
+    pointer-events: none;
+  }
+  .header-accent {
+    width: 6px;
+    background: var(--teal);
+    flex-shrink: 0;
+    margin: 0 24px 0 0;
+  }
+  .header-content { padding: 22px 0; flex: 1; }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -0.3px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+  .header-logo {
+    display: flex; align-items: center;
+    padding: 0 0 0 24px;
+  }
+  .logo-mark {
+    width: 44px; height: 44px;
+    background: var(--teal);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 24px; height: 24px; }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
+  /* ── FORM CARD ── */
+  .form-card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    margin-top: 28px;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #BB2528, #165B33);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
+  .card-section {
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-section:last-child { border-bottom: none; }
 
-        .question-box {
-            margin-bottom: 30px;
-        }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label .label-num {
+    width: 22px; height: 22px;
+    background: var(--teal);
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    flex-shrink: 0;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border);
+  }
 
-        .question-text {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-        }
+  /* ── EMPLOYEE SELECT ── */
+  .employee-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+  .emp-btn {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text-mid);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1.3;
+  }
+  .emp-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-pale); }
+  .emp-btn.selected {
+    background: var(--slate);
+    border-color: var(--slate);
+    color: var(--white);
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
 
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+  /* ── CATEGORY TABS ── */
+  .cat-tabs {
+    display: flex; gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .cat-tab {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--text-mid);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .cat-tab:hover { border-color: var(--teal); color: var(--teal); }
+  .cat-tab.active {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: var(--white);
+  }
 
-        .option-btn {
-            padding: 20px;
-            border: none;
-            border-radius: 15px;
-            background: #f5f5f5;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-        }
+  /* ── PRODUCT LIST ── */
+  .product-panel { display: none; }
+  .product-panel.active { display: block; }
 
-        .option-btn:hover:not(:disabled) {
-            background: #e0e0e0;
-            transform: scale(1.02);
-        }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
 
-        .option-btn:disabled {
-            cursor: not-allowed;
-        }
+  .product-row {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.15s;
+  }
+  .product-row.has-qty {
+    background: var(--teal-light);
+    border-color: var(--teal);
+  }
+  .product-icon {
+    font-size: 20px;
+    width: 36px; height: 36px;
+    background: var(--white);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .product-name {
+    flex: 1;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .qty-ctrl {
+    display: flex; align-items: center;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .qty-btn {
+    width: 32px; height: 32px;
+    background: none; border: none;
+    color: var(--text-mid);
+    font-size: 18px; font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.12s;
+    line-height: 1;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .qty-btn:hover { background: var(--teal); color: var(--white); }
+  .qty-val {
+    min-width: 28px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--slate);
+    padding: 0 2px;
+  }
+  .product-row.has-qty .qty-val { color: var(--teal); font-weight: 700; }
 
-        .option-btn.correct {
-            background: #4CAF50;
-            color: white;
-        }
+  /* ── OTHER REQUEST ── */
+  .other-wrap {
+    margin-top: 16px;
+    border: 1.5px dashed var(--border-mid);
+    border-radius: 12px;
+    padding: 16px;
+    background: var(--bg);
+    transition: border-color 0.2s;
+  }
+  .other-wrap:focus-within { border-color: var(--teal); border-style: solid; }
+  .other-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .other-input {
+    width: 100%;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    resize: none;
+    min-height: 60px;
+    line-height: 1.5;
+  }
+  .other-input::placeholder { color: var(--text-light); }
 
-        .option-btn.incorrect {
-            background: #f44336;
-            color: white;
-        }
+  /* ── URGENCY ── */
+  .urgency-row {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .urgency-btn {
+    flex: 1; min-width: 130px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .urgency-icon { font-size: 22px; display: block; margin-bottom: 5px; }
+  .urgency-label {
+    font-size: 13px; font-weight: 600;
+    color: var(--text-mid);
+    display: block;
+  }
+  .urgency-sub {
+    font-size: 11px; color: var(--text-light);
+    display: block; margin-top: 2px;
+  }
+  .urgency-btn:hover { border-color: var(--teal); }
+  .urgency-btn.selected { border-color: var(--teal); background: var(--teal-pale); }
+  .urgency-btn.selected .urgency-label { color: var(--teal); }
 
-        .result-screen {
-            text-align: center;
-        }
 
-        .result-screen h2 {
-            font-size: 2.5em;
-            color: #BB2528;
-            margin-bottom: 20px;
-        }
+  /* ── NOTES ── */
+  .notes-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    resize: none;
+    min-height: 72px;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+  .notes-input:focus { border-color: var(--teal); }
+  .notes-input::placeholder { color: var(--text-light); }
 
-        .clue-box {
-            background: linear-gradient(135deg, #fff5f5, #f0fff0);
-            border: 3px solid #BB2528;
-            border-radius: 20px;
-            padding: 40px;
-            margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+  /* ── SUBMIT ── */
+  .submit-section {
+    padding: 24px 32px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .submit-btn {
+    flex: 1;
+    background: var(--slate);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    padding: 16px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(30,58,79,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .submit-btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.06) 100%);
+  }
+  .submit-btn:hover { background: var(--slate-mid); box-shadow: 0 6px 20px rgba(30,58,79,0.3); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { background: var(--border); color: var(--text-light); box-shadow: none; transform: none; cursor: not-allowed; }
 
-        .clue-text {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #165B33;
-            line-height: 1.6;
-        }
+  .cart-summary {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+  .cart-count { color: var(--teal); font-weight: 700; font-size: 15px; }
 
-        .sparkle {
-            font-size: 2em;
-            animation: sparkle 1s infinite;
-        }
+  .validation-msg {
+    background: var(--red-bg);
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 0 32px 16px;
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 500;
+    display: none;
+  }
+  .validation-msg.show { display: block; }
 
-        @keyframes sparkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.2); }
-        }
+  /* ── SUCCESS ── */
+  .success-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(245,244,240,0.97);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+  .success-overlay.show { display: flex; }
 
-        .score {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 20px;
-        }
+  .success-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .success-check {
+    width: 64px; height: 64px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    box-shadow: 0 8px 20px rgba(5,150,105,0.3);
+  }
+  .success-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--slate);
+    margin-bottom: 8px;
+  }
+  .success-sub {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .success-items-box {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: left;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+  }
+  .success-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .success-item:last-child { border-bottom: none; }
+  .success-item-name { color: var(--text); font-weight: 500; }
+  .success-item-qty {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--teal);
+    font-weight: 500;
+    background: var(--teal-light);
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+  .new-req-btn {
+    width: 100%;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .new-req-btn:hover { border-color: var(--slate); color: var(--slate); }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .question-text {
-                font-size: 1.2em;
-            }
-            
-            .option-btn {
-                padding: 15px;
-                font-size: 1em;
-            }
-        }
-    </style>
+  /* ── SELECTED ITEMS SIDEBAR ── */
+  .selected-bar {
+    display: none;
+    background: var(--teal-pale);
+    border: 1px solid var(--teal-light);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 13px;
+  }
+  .selected-bar.show { display: block; }
+  .selected-bar-title {
+    font-weight: 600; color: var(--teal);
+    margin-bottom: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .selected-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--white);
+    border: 1px solid var(--teal-light);
+    border-radius: 20px;
+    padding: 3px 10px 3px 8px;
+    margin: 3px 4px 3px 0;
+    font-size: 12.5px;
+    color: var(--slate);
+    font-weight: 500;
+  }
+  .tag-qty {
+    background: var(--teal);
+    color: var(--white);
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="gift-icon">🎁</div>
-            <h1>Christmas Quiz!</h1>
-        </div>
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressBar"></div>
-        </div>
+<div class="page">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-accent"></div>
+    <div class="header-content">
+      <div class="header-eyebrow">Schooner Transport</div>
+      <div class="header-title">Office Supply Request</div>
+      <div class="header-sub">Submit a request and it will be sent to administration</div>
+    </div>
+    <div class="header-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+          <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+        </svg>
+      </div>
+    </div>
+  </div>
 
-        <div id="quizContent"></div>
+  <!-- FORM CARD -->
+  <div class="form-card">
+
+    <!-- STEP 1: YOUR NAME -->
+    <div class="card-section">
+      <div class="section-label"><span class="label-num">1</span> Your Name</div>
+      <div class="employee-grid" id="empGrid"></div>
     </div>
 
-    <script>
-        const questions = [
-            {
-                question: "What's the most popular Christmas movie of all time?",
-                options: ["Home Alone", "It's a Wonderful Life", "Elf", "The Grinch"],
-                correct: 1
-            },
-            {
-                question: "In what year was the first Christmas card sent?",
-                options: ["1843", "1867", "1901", "1820"],
-                correct: 0
-            },
-            {
-                question: "What do people traditionally put on top of a Christmas tree?",
-                options: ["A star", "A bow", "A snowflake", "An ornament"],
-                correct: 0
-            },
-            {
-                question: "Which country started the tradition of putting up a Christmas tree?",
-                options: ["United States", "England", "Germany", "France"],
-                correct: 2
-            },
-            {
-                question: "Complete the lyric: 'Jingle bells, jingle bells, jingle all the ___'",
-                options: ["Day", "Way", "Night", "Time"],
-                correct: 1
-            },
-            {
-                question: "Finish the song: 'Rudolph the red-nosed reindeer, had a very shiny ___'",
-                options: ["Light", "Nose", "Coat", "Smile"],
-                correct: 1
-            },
-            {
-                question: "Complete: 'Deck the halls with boughs of ___'",
-                options: ["Holly", "Mistletoe", "Pine", "Ivy"],
-                correct: 0
-            }
-        ];
+    <!-- STEP 2: ITEMS -->
+    <div class="card-section">
+      <div class="section-label"><span class="label-num">2</span> Items Needed</div>
 
-        let currentQuestion = 0;
-        let score = 0;
-        let selectedAnswer = null;
+      <div class="cat-tabs" id="catTabs">
+        <button class="cat-tab active" onclick="switchCat('office', this)">📄 Office Supplies</button>
+        <button class="cat-tab" onclick="switchCat('printer', this)">🖨️ Printer Supplies</button>
+        <button class="cat-tab" onclick="switchCat('cleaning', this)">🧹 Cleaning &amp; Janitorial</button>
+      </div>
 
-        function updateProgressBar() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
+      <!-- Office Supplies -->
+      <div class="product-panel active" id="panel-office">
+        <div class="product-grid" id="grid-office"></div>
+      </div>
 
-        function showQuestion() {
-            const question = questions[currentQuestion];
-            const content = document.getElementById('quizContent');
-            
-            content.innerHTML = `
-                <div class="question-box">
-                    <div class="question-text">${question.question}</div>
-                    <div class="options">
-                        ${question.options.map((option, index) => `
-                            <button class="option-btn" onclick="selectAnswer(${index})">
-                                ${option}
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            
-            updateProgressBar();
-        }
+      <!-- Printer Supplies -->
+      <div class="product-panel" id="panel-printer">
+        <div class="product-grid" id="grid-printer"></div>
+      </div>
 
-        function selectAnswer(index) {
-            if (selectedAnswer !== null) return;
-            
-            selectedAnswer = index;
-            const buttons = document.querySelectorAll('.option-btn');
-            const correctIndex = questions[currentQuestion].correct;
-            
-            buttons.forEach((btn, i) => {
-                btn.disabled = true;
-                if (i === correctIndex) {
-                    btn.classList.add('correct');
-                } else if (i === index && i !== correctIndex) {
-                    btn.classList.add('incorrect');
-                }
-            });
-            
-            if (index === correctIndex) {
-                score++;
-            }
-            
-            setTimeout(() => {
-                currentQuestion++;
-                selectedAnswer = null;
-                
-                if (currentQuestion < questions.length) {
-                    showQuestion();
-                } else {
-                    showResult();
-                }
-            }, 1500);
-        }
+      <!-- Cleaning -->
+      <div class="product-panel" id="panel-cleaning">
+        <div class="product-grid" id="grid-cleaning"></div>
+      </div>
 
-        function showResult() {
-            const content = document.getElementById('quizContent');
-            
-            content.innerHTML = `
-                <div class="result-screen">
-                    <h2>🎄 Great Job! 🎄</h2>
-                    <div class="score">You got ${score} out of ${questions.length} correct!</div>
-                    
-                    <div class="clue-box">
-                        <div class="sparkle">✨</div>
-                        <div class="clue-text">
-                            Your gift is hidden inside the table!
-                        </div>
-                        <div class="sparkle">✨</div>
-                    </div>
-                    
-                    <p style="color: #666; font-size: 1.2em; margin-top: 20px;">
-                        Merry Christmas! 🎅
-                    </p>
-                </div>
-            `;
-            
-            updateProgressBar();
-        }
+      <!-- Other -->
+      <div class="other-wrap">
+        <div class="other-label">➕ Other — describe anything not listed above</div>
+        <textarea class="other-input" id="otherInput" placeholder="e.g. Sticky notes, HDMI cable, hand sanitizer…" rows="2" oninput="updateCart()"></textarea>
+      </div>
 
-        // Start the quiz
-        showQuestion();
-    </script>
+      <!-- Selected summary bar -->
+      <div class="selected-bar" id="selectedBar">
+        <div class="selected-bar-title">Selected Items</div>
+        <div id="selectedTags"></div>
+      </div>
+    </div>
+
+    <!-- STEP 3: URGENCY -->
+    <div class="card-section">
+      <div class="section-label"><span class="label-num">3</span> How Soon Do You Need This?</div>
+      <div class="urgency-row">
+        <button class="urgency-btn" id="urg-routine" onclick="selectUrgency('Routine — this week')">
+          <span class="urgency-icon">📅</span>
+          <span class="urgency-label">Routine</span>
+          <span class="urgency-sub">This week</span>
+        </button>
+        <button class="urgency-btn" id="urg-soon" onclick="selectUrgency('Soon — within 2 days')">
+          <span class="urgency-icon">⏳</span>
+          <span class="urgency-label">Soon</span>
+          <span class="urgency-sub">Within 2 days</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 4: NOTES -->
+    <div class="card-section">
+      <div class="section-label"><span class="label-num">4</span> Additional Notes <span style="font-family:DM Sans;font-weight:300;letter-spacing:0;text-transform:none;color:var(--text-light);font-size:11px">(optional)</span></div>
+      <textarea class="notes-input" id="notesInput" placeholder="Any specific brand, size, or details…"></textarea>
+    </div>
+
+    <!-- VALIDATION MSG -->
+    <div class="validation-msg" id="validMsg"></div>
+
+    <!-- SUBMIT -->
+    <div class="submit-section">
+      <div class="cart-summary" id="cartSummary">Select items above</div>
+      <button class="submit-btn" id="submitBtn" onclick="submitRequest()">Send Request →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-check">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <div class="success-title">Request Submitted</div>
+    <div class="success-sub" id="successSub">Your request has been sent to administration.</div>
+    <div class="success-items-box" id="successItems"></div>
+    <button class="new-req-btn" onclick="resetForm()">Submit Another Request</button>
+  </div>
+</div>
+
+<script>
+// ── CONFIG — replace with your Google Apps Script URL ────────────────────────
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdvZOVbAwAUpJMpqCTw9GSbUAXgYZeANAB5CwM2Qo1BOycfXhVJbgZD3TfJoGHAOVE/exec";
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const EMPLOYEES = [
+  "Steen McDonald","Ayoub Habou","Norma Skene","Tetiana Krytskaliyuk",
+  "Yannick Lapensee","Jesse Vokaty","Sandra Helou","Shina Pak","Joseph Khawaja"
+];
+
+const PRODUCTS = {
+  office: [
+    { name: "A4 Paper",          icon: "📄", unit: "ream" },
+    { name: "Stapler Refills",   icon: "📎", unit: "box"  },
+    { name: "Keyboard",          icon: "⌨️", unit: "unit" },
+    { name: "Mouse",             icon: "🖱️", unit: "unit" },
+    { name: "Sticky Notes",      icon: "🗒️", unit: "pack" },
+    { name: "Pens",              icon: "🖊️", unit: "box"  },
+    { name: "Folders",           icon: "📁", unit: "pack" },
+    { name: "Tape",              icon: "🎀", unit: "roll" },
+  ],
+  printer: [
+    { name: "Toner — MFC L-2750 DW",   icon: "🖨️", unit: "unit" },
+    { name: "Cartridge — MFC L-2750 DW",icon: "🖨️", unit: "unit" },
+    { name: "Toner — MFC L-2730 DW",   icon: "🖨️", unit: "unit" },
+    { name: "Cartridge — MFC L-2730 DW",icon: "🖨️", unit: "unit" },
+    { name: "Toner — MFC-L3770CDW",    icon: "🖨️", unit: "unit" },
+    { name: "Cartridge — MFC-L3770CDW",icon: "🖨️", unit: "unit" },
+  ],
+  cleaning: [
+    { name: "Paper Roll Towel",      icon: "🧻", unit: "roll" },
+    { name: "Lysol Wipes",           icon: "🧹", unit: "pack" },
+    { name: "Toilet Paper",          icon: "🧻", unit: "roll" },
+    { name: "Facial Tissue",         icon: "🤧", unit: "box"  },
+    { name: "Multi-Surface Cleaner", icon: "🧴", unit: "btl"  },
+    { name: "Black Garbage Bags",    icon: "🗑️", unit: "box"  },
+    { name: "Soft Soap",             icon: "🧼", unit: "btl"  },
+  ]
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let selectedEmployee = null;
+let quantities = {};          // { productName: qty }
+let selectedUrgency = null;
+let activeCategory = 'office';
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+  renderEmployees();
+  Object.keys(PRODUCTS).forEach(cat => renderProducts(cat));
+}
+
+// ── EMPLOYEES ─────────────────────────────────────────────────────────────────
+function renderEmployees() {
+  document.getElementById('empGrid').innerHTML = EMPLOYEES.map(e => `
+    <button class="emp-btn ${e === selectedEmployee ? 'selected' : ''}"
+            onclick="selectEmployee('${e.replace(/'/g,"\\'")}')">
+      ${e}
+    </button>`).join('');
+}
+function selectEmployee(name) {
+  selectedEmployee = name;
+  renderEmployees();
+}
+
+// ── CATEGORIES ────────────────────────────────────────────────────────────────
+function switchCat(cat, el) {
+  document.querySelectorAll('.product-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + cat).classList.add('active');
+  el.classList.add('active');
+  activeCategory = cat;
+}
+
+// ── PRODUCTS ──────────────────────────────────────────────────────────────────
+function renderProducts(cat) {
+  document.getElementById('grid-' + cat).innerHTML = PRODUCTS[cat].map((p, i) => `
+    <div class="product-row ${(quantities[p.name]||0) > 0 ? 'has-qty' : ''}" id="prow-${cat}-${i}">
+      <div class="product-icon">${p.icon}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty('${p.name.replace(/'/g,"\\'")}','${cat}',${i},-1)">−</button>
+        <div class="qty-val" id="pqty-${cat}-${i}">${quantities[p.name] || 0}</div>
+        <button class="qty-btn" onclick="changeQty('${p.name.replace(/'/g,"\\'")}','${cat}',${i},1)">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function changeQty(name, cat, idx, delta) {
+  const newVal = Math.max(0, Math.min(50, (quantities[name] || 0) + delta));
+  quantities[name] = newVal;
+  document.getElementById(`pqty-${cat}-${idx}`).textContent = newVal;
+  document.getElementById(`prow-${cat}-${idx}`).classList.toggle('has-qty', newVal > 0);
+  updateCart();
+}
+
+// ── CART SUMMARY ──────────────────────────────────────────────────────────────
+function updateCart() {
+  const items = Object.entries(quantities).filter(([,q]) => q > 0);
+  const otherText = document.getElementById('otherInput').value.trim();
+  const total = items.length + (otherText ? 1 : 0);
+
+  const summary = document.getElementById('cartSummary');
+  const bar = document.getElementById('selectedBar');
+  const tags = document.getElementById('selectedTags');
+
+  if (total === 0) {
+    summary.innerHTML = 'Select items above';
+    bar.classList.remove('show');
+    return;
+  }
+
+  summary.innerHTML = `<span class="cart-count">${total}</span> item${total > 1 ? 's' : ''} selected`;
+  bar.classList.add('show');
+
+  let tagHTML = items.map(([name, qty]) =>
+    `<span class="selected-tag"><span class="tag-qty">×${qty}</span>${name}</span>`
+  ).join('');
+  if (otherText) tagHTML += `<span class="selected-tag"><span class="tag-qty">?</span>Other</span>`;
+  tags.innerHTML = tagHTML;
+}
+
+// ── URGENCY ───────────────────────────────────────────────────────────────────
+function selectUrgency(val) {
+  selectedUrgency = val;
+  document.querySelectorAll('.urgency-btn').forEach(b => b.classList.remove('selected'));
+  if (val.includes('Routine')) {
+    document.getElementById('urg-routine').classList.add('selected');
+  } else {
+    document.getElementById('urg-soon').classList.add('selected');
+  }
+}
+
+// ── VALIDATE ──────────────────────────────────────────────────────────────────
+function validate() {
+  if (!selectedEmployee) return "Please select your name.";
+  const hasItems = Object.values(quantities).some(q => q > 0);
+  const hasOther = document.getElementById('otherInput').value.trim().length > 0;
+  if (!hasItems && !hasOther) return "Please select at least one item, or describe your request in the Other field.";
+  if (!selectedUrgency) return "Please select how soon you need this.";
+  return null;
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────────────
+async function submitRequest() {
+  const err = validate();
+  const msg = document.getElementById('validMsg');
+  if (err) { msg.textContent = err; msg.classList.add('show'); return; }
+  msg.classList.remove('show');
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = "Sending…";
+
+  const items = Object.entries(quantities)
+    .filter(([,q]) => q > 0)
+    .map(([name, qty]) => ({ name, qty }));
+
+  const otherText = document.getElementById('otherInput').value.trim();
+  if (otherText) items.push({ name: "OTHER: " + otherText, qty: 1 });
+
+  const payload = {
+    employee: selectedEmployee,
+    date: new Date().toISOString().split('T')[0],
+    urgency: selectedUrgency,
+    notes: document.getElementById('notesInput').value.trim(),
+    items
+  };
+
+  try {
+    if (SCRIPT_URL === "YOUR_OFFICE_SCRIPT_URL") {
+      await new Promise(r => setTimeout(r, 800));
+    } else {
+      await fetch(SCRIPT_URL, {
+        method: "POST", mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    }
+    showSuccess(payload);
+  } catch(e) {
+    msg.textContent = "Network error — please check your connection and try again.";
+    msg.classList.add('show');
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Send Request →";
+}
+
+function showSuccess(payload) {
+  document.getElementById('successSub').textContent =
+    `${payload.employee}'s request has been sent to administration. You're all set!`;
+
+  document.getElementById('successItems').innerHTML =
+    payload.items.map(i =>
+      `<div class="success-item">
+        <span class="success-item-name">${i.name}</span>
+        <span class="success-item-qty">×${i.qty}</span>
+      </div>`
+    ).join('');
+
+  document.getElementById('successOverlay').classList.add('show');
+}
+
+function resetForm() {
+  selectedEmployee = null;
+  quantities = {};
+  selectedUrgency = null;
+  document.getElementById('otherInput').value = '';
+  document.getElementById('notesInput').value = '';
+  document.getElementById('successOverlay').classList.remove('show');
+  document.querySelectorAll('.urgency-btn').forEach(b => b.classList.remove('selected'));
+  renderEmployees();
+  Object.keys(PRODUCTS).forEach(cat => renderProducts(cat));
+  updateCart();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+init();
+</script>
 </body>
 </html>
