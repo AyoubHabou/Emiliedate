@@ -237,15 +237,6 @@
     background: var(--teal-light);
     border-color: var(--teal);
   }
-  .product-icon {
-    font-size: 20px;
-    width: 36px; height: 36px;
-    background: var(--white);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-sm);
-  }
   .product-name {
     flex: 1;
     font-size: 13.5px;
@@ -667,41 +658,44 @@
 
 <script>
 // ── CONFIG — replace with your Google Apps Script URL ────────────────────────
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdvZOVbAwAUpJMpqCTw9GSbUAXgYZeANAB5CwM2Qo1BOycfXhVJbgZD3TfJoGHAOVE/exec";
+const SCRIPT_URL = "YOUR_OFFICE_SCRIPT_URL";
 
 // ── DATA ─────────────────────────────────────────────────────────────────────
 const EMPLOYEES = [
-  "Steen McDonald","Ayoub Habou","Norma Skene","Tetiana Krytskaliyuk",
-  "Yannick Lapensee","Jesse Vokaty","Sandra Helou","Shina Pak","Joseph Khawaja"
+  "Ayoub Habou","Jennifer","Jesse Vokaty","Joseph Khawaja","Norma Skene",
+  "Sandra Helou","Shina Pak","Steen McDonald","Tetiana Krytskaliyuk",
+  "Yannick Lapensee"
 ];
 
 const PRODUCTS = {
   office: [
-    { name: "A4 Paper",          icon: "📄", unit: "ream" },
-    { name: "Stapler Refills",   icon: "📎", unit: "box"  },
-    { name: "Keyboard",          icon: "⌨️", unit: "unit" },
-    { name: "Mouse",             icon: "🖱️", unit: "unit" },
-    { name: "Sticky Notes",      icon: "🗒️", unit: "pack" },
-    { name: "Pens",              icon: "🖊️", unit: "box"  },
-    { name: "Folders",           icon: "📁", unit: "pack" },
-    { name: "Tape",              icon: "🎀", unit: "roll" },
+    { name: "A4 Paper",          unit: "ream" },
+    { name: "Stapler Refills",   unit: "box"  },
+    { name: "Keyboard",          unit: "unit" },
+    { name: "Mouse",             unit: "unit" },
+    { name: "Sticky Notes",      unit: "pack" },
+    { name: "Corrector Pen",     unit: "unit" },
+    { name: "Pens",              unit: "box"  },
+    { name: "Folders",           unit: "pack" },
+    { name: "Tape",              unit: "roll" },
   ],
   printer: [
-    { name: "Toner — MFC L-2750 DW",   icon: "🖨️", unit: "unit" },
-    { name: "Cartridge — MFC L-2750 DW",icon: "🖨️", unit: "unit" },
-    { name: "Toner — MFC L-2730 DW",   icon: "🖨️", unit: "unit" },
-    { name: "Cartridge — MFC L-2730 DW",icon: "🖨️", unit: "unit" },
-    { name: "Toner — MFC-L3770CDW",    icon: "🖨️", unit: "unit" },
-    { name: "Cartridge — MFC-L3770CDW",icon: "🖨️", unit: "unit" },
+    { name: "Toner — MFC L-2750 DW",    unit: "unit" },
+    { name: "Cartridge — MFC L-2750 DW", unit: "unit" },
+    { name: "Toner — MFC L-2730 DW",    unit: "unit" },
+    { name: "Cartridge — MFC L-2730 DW", unit: "unit" },
+    { name: "Toner — MFC-L3770CDW",     unit: "unit" },
+    { name: "Cartridge — MFC-L3770CDW", unit: "unit" },
   ],
   cleaning: [
-    { name: "Paper Roll Towel",      icon: "🧻", unit: "roll" },
-    { name: "Lysol Wipes",           icon: "🧹", unit: "pack" },
-    { name: "Toilet Paper",          icon: "🧻", unit: "roll" },
-    { name: "Facial Tissue",         icon: "🤧", unit: "box"  },
-    { name: "Multi-Surface Cleaner", icon: "🧴", unit: "btl"  },
-    { name: "Black Garbage Bags",    icon: "🗑️", unit: "box"  },
-    { name: "Soft Soap",             icon: "🧼", unit: "btl"  },
+    { name: "Paper Roll Towel",      unit: "roll" },
+    { name: "Lysol Wipes",           unit: "pack" },
+    { name: "Toilet Paper",          unit: "roll" },
+    { name: "Facial Tissue",         unit: "box"  },
+    { name: "Multi-Surface Cleaner", unit: "btl"  },
+    { name: "Black Garbage Bags",    unit: "box"  },
+    { name: "White Plastic Bags",    unit: "box"  },
+    { name: "Soft Soap",             unit: "btl"  },
   ]
 };
 
@@ -743,7 +737,6 @@ function switchCat(cat, el) {
 function renderProducts(cat) {
   document.getElementById('grid-' + cat).innerHTML = PRODUCTS[cat].map((p, i) => `
     <div class="product-row ${(quantities[p.name]||0) > 0 ? 'has-qty' : ''}" id="prow-${cat}-${i}">
-      <div class="product-icon">${p.icon}</div>
       <div class="product-name">${p.name}</div>
       <div class="qty-ctrl">
         <button class="qty-btn" onclick="changeQty('${p.name.replace(/'/g,"\\'")}','${cat}',${i},-1)">−</button>
